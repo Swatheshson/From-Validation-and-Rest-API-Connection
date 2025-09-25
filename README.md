@@ -25,5 +25,3 @@ It includes form handling, validation, and a simple user list with edit function
 
 ---
 
-## 📂 Project Structure
-
