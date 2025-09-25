@@ -1,0 +1,24 @@
+body {
+  background-color: #e9f5ec; /* light green background */
+}
+
+h1 {
+  background: linear-gradient(90deg, #1b5e20, #2e7d32); /* dark green gradient */
+}
+
+.form-label {
+  background-color: #2e7d32 !important; /* solid dark green */
+}
+
+.form-control:focus {
+  border-color: #1b5e20;
+  box-shadow: 0 0 5px rgba(27, 94, 32, 0.6);
+}
+
+.table thead {
+  background-color: #1b5e20 !important;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #c8e6c9; /* light shade of green */
+}
