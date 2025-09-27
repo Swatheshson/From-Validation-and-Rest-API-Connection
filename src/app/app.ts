@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { FormControl, FormGroup} from '@angular/forms';
+import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -16,7 +16,7 @@ export class App {
   protected readonly title = signal('reactiveform');
 
 constructor(private http:HttpClient){
-  this.getAllUser();
+  
 }
 
   // userObj: any = {
@@ -31,32 +31,39 @@ constructor(private http:HttpClient){
 
 
 
-  userforms: FormGroup = new FormGroup({
-    id :new FormControl('0'),
-    name:new FormControl(''),
-    username:new FormControl(''),
-    email:new FormControl('')
-  });
+ userforms: FormGroup = new FormGroup({
+  id: new FormControl('', [
+    Validators.required,
+    Validators.pattern(/^[0-9]*$/) // only numbers allowed
+  ]),
+  name: new FormControl(''),
+  username: new FormControl(''),
+  email: new FormControl('',[Validators.required,Validators.email])
+});
+
 
   //editfunction
   onEdit(id:number){
     this.http.get('https://jsonplaceholder.typicode.com/users/'+id).subscribe((res:any)=>{
-    this.userforms=new FormGroup({
-    id :new FormControl(res.id),
-    name:new FormControl(res.name),
-    username:new FormControl(res.username),
-    email:new FormControl(res.email)
+    this.userforms.patchValue({
+    id :res.id.toString(),
+    name:res.name,
+    username:res.username,
+    email:res.email
   });
     })
   }
   //insert data
-  onSaveUser(){
-    //obtaining value from user forms
+  onSaveUser() {
+  if (this.userforms.valid) {
     const obj = this.userforms.value;
-    this.http.post('https://jsonplaceholder.typicode.com/users',obj).subscribe((res:any)=>{
-      alert("user created")
-    })
+    this.http.post('https://jsonplaceholder.typicode.com/users', obj)
+      .subscribe(() => alert('User created'));
+  } else {
+    alert('Form is invalid! Please check the fields.');
   }
+}
+
 
   getAllUser(){
     this.http.get('https://jsonplaceholder.typicode.com/users').subscribe((res:any)=>{
